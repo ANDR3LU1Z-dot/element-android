@@ -54,6 +54,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         key = DebugFeatureKeys.onboardingPersonalize,
                         factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 ),
+                createBooleanFeature(
+                        label = "FTUE Personalize combined choose server",
+                        key = DebugFeatureKeys.onboardingCombinedChooseServer,
+                        factory = VectorFeatures::isOnboardingCombinedChooseServerEnabled
+                )
         ))
     }
 
