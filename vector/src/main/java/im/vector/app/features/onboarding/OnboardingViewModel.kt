@@ -145,6 +145,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.InitWith                   -> handleInitWith(action)
             is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
+            is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -280,7 +281,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterWith(action: OnboardingAction.LoginOrRegister) {
+    private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
         handleRegisterAction(RegisterAction.CreateAccount(
                 action.username,
@@ -469,7 +470,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (state.signMode) {
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
-            SignMode.SignUp             -> handleRegisterWith(action)
+            SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }
     }
