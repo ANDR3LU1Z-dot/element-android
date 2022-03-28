@@ -69,6 +69,7 @@ class OnboardingViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder(fakeSession)
     private val fakeAuthenticationService = FakeAuthenticationService()
     private val fakeRegisterActionHandler = FakeRegisterActionHandler()
+    private val fakeVectorFeatures = FakeVectorFeatures()
 
     lateinit var viewModel: OnboardingViewModel
 
@@ -180,7 +181,8 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when registering account, then updates state and emits account created event`() = runTest {
+    fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
+        fakeVectorFeatures.givenPersonalisationEnabled()
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         val test = viewModel.test()
@@ -198,7 +200,8 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
+    fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
+        fakeVectorFeatures.givenPersonalisationEnabled()
         givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
         val test = viewModel.test()
 
@@ -340,7 +343,7 @@ class OnboardingViewModelTest {
                 ReAuthHelper(),
                 FakeStringProvider().instance,
                 FakeHomeServerHistoryService(),
-                FakeVectorFeatures(),
+                fakeVectorFeatures,
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
                 fakeRegisterActionHandler.instance,
