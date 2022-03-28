@@ -317,7 +317,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                 }
             }
-            OnboardingAction.ResetSignMode       -> {
+            OnboardingAction.ResetSignMode              -> {
                 setState {
                     copy(
                             isLoading = false,
@@ -327,13 +327,13 @@ class OnboardingViewModel @AssistedInject constructor(
                     )
                 }
             }
-            OnboardingAction.ResetLogin          -> {
+            OnboardingAction.ResetAuthenticationAttempt -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState { copy(isLoading = false) }
                 }
             }
-            OnboardingAction.ResetResetPassword  -> {
+            OnboardingAction.ResetResetPassword         -> {
                 setState {
                     copy(
                             isLoading = false,
